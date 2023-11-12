@@ -1,10 +1,10 @@
 package state;
 
 
+import org.apache.flink.api.common.RuntimeExecutionMode;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.functions.KeySelector;
-import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
@@ -19,8 +19,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CustomStateDemo {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        env.setRuntimeMode(RuntimeExecutionMode.STREAMING);
 
-        DataStream<String> source = env.socketTextStream("127.0.0.1", 9999);
+        DataStream<String> source = env.socketTextStream("localhost", 9999);
 
         SingleOutputStreamOperator<String> mapedStream = source.map(item -> item.toLowerCase(Locale.ROOT));
 
